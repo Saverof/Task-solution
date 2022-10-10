@@ -1,71 +1,84 @@
-﻿#include <iostream>
+#include <iostream>
+#include <stack>
 
 using namespace std;
 
 // Зачем отправлять копию строки? Может быть лучше константная ссылка?
 // Почему возвращается void, а не bool?
-void bracket_check(string str)
+// Исправил
+bool result(const string &str, bool state)
 {
-    bool state = true;  // условие выхода из цикла state == false
-//    Зачем нужна переменная stateEND?
-    bool stateEND = false; // принудительное окончание цикла
-    int chL = 0; // счет левых скобок (
-    int chR = 0; // счет правых скобок )
-//    Зачем нужна эта переменная?
-    int i = 0; // итератор внутри цикла
+    if (state)
+        cout << str << " - правильная скобочная последовательность\n";
+    else
+        cout << str << " - неправильная скобочная последовательность\n";
 
+    return 0;
+}
+
+// Функция обработки строки
+bool bracket_check(const string &str)
+{
+    bool state = true;      // Отображает правильно ли выражение
+    int bracket_open = 0;   // Количество открытых скобок
+  
 //    Можно использовать цикл for?
-    while (state)
+ // Да, исправил
+  
+    for (int i = 0; i < str.size(); i++)
     {
         switch (str[i])
         {
-        case '(': 
-            chL++;
+        case '(':
+            if (i != 0) // Если мы находимся в первом символе то пропускаем этот шаг
+            {
+                if (str[i - 1] == '(') // Если предыдущая скобка была открывающей, увеличиваем счетчик открытых скобок
+                    bracket_open++;
+                else if (str[i - 1] != '(' && str[i] == '(') // Иначе если предыдущая скобка НЕ была открывающей, а текущая является открывающей
+                {
+                    if (bracket_open < 0) // И если число закрывающих скобок меньше числа открывающих 
+                        state = false; // Получаем, что последовательность заведомо неправильная 
+                    else
+                        bracket_open++; // Иначе увеличиваем число открывающих скобок
+                }
+            }else
+                bracket_open++; // И увеличиваем число открывающих скобок
             break;
         case ')':
-            chR++;
+            bracket_open--;
             break;
         default:
             break;
-        }
-
-        if (i == str.size())
-        {
-            state = false;
-            stateEND = true;
-        }
-
-        i++;
-
-        if (chL == chR)
-        {
-            if (i == str.size())
-            {
-                state = false;
-            }
-        }
+        }  
     }
 
 //    Вынести в отдельную функцию. Зачем проверять условия здесь?
 //    Зачем писать != true?
-    if (i == str.size() && stateEND != true)
-    {
-        cout << str << " - правильная скобочная последовательность\n";
-    }
-    else
-    {
-        cout << str << " - неправильная скобочная последовательность\n";
-    }
-   
-    
+  // Исправил, полностью переписал функцию
+  
+    // Проверяем соотвествуют ли полученные данные требуемым
+    if (bracket_open != 0)
+        state = false;
+
+    // Выводим результат
+    result(str, state);
+    return 0;
 }
 
 int main() 
 {
     setlocale(LC_ALL, "Rus");
+    
+    // Тестовые комбинации 
     bracket_check("((x * y) + (2 * (x + y))) * (y + 3)");
     bracket_check("((((x * y) + (2 * (x - y)))");
-//    В этом случае будет неправильная последовательность
+    bracket_check("())(())");
+    bracket_check(")(())(");
+    bracket_check("(()())");
+  //    В этом случае будет неправильная последовательность
+    // Исправил
     bracket_check(")(");
+
+    return 0;
 }
 
