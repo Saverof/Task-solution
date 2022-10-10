@@ -3,11 +3,13 @@
 #include <iterator>
 using namespace std;
 
+// Логичнее вернуть новую строку, а не изменять существующую
 void solve(string& str, int max_size)
 {
     // Уаляем все пробелы больше одного
     str.erase(unique_copy(str.begin(), str.end(), str.begin(), [](char ch1, char ch2) { return ch1 == ' ' && ch2 == ' '; }), str.end());
 
+//    А последний не надо проверять?
     // Проверяем чем является первый символ
     if (str.at(0) == ' ')
     {
@@ -26,7 +28,7 @@ int main()
 {
     // Задаем исходные данные
     int m = 40;
-    string text = "   Lorem   ipsum  dolor      sit  amet,    consectetuer adipiscing elit.       Maecenas porttitor congue   massa. Fusce posuere, magna sed  pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis     urna.";
+    string text = "   Lorem   ipsum  dolor      sit  amet,    consectetuer adipiscing elit.       Maecenas porttitor congue   massa. Fusce posuere, magna sed  pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis     urna.      ";
    
     // Вызываем решение
     solve(text, m);
