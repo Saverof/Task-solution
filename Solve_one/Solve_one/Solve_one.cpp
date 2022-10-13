@@ -6,6 +6,7 @@ using namespace std;
 string solve(string str, int max_size)
 {
     // Переменная для хранения обработанного текста
+//    А нужно ли сохранять str в new_text? Как передаются аргументы в функции в C/C++?
     string new_text = str;
 
     // Удаляем все пробелы больше одного

@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// Зачем здесь шаблоны??? Первый раз вижу такое решение. С указателями работал?
 template <int n, int m>
 bool max_in_col(int (&matrix)[n][m], int i, int j)
 {
