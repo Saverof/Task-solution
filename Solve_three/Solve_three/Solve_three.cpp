@@ -1,9 +1,9 @@
-﻿#include <iostream>
+#include <iostream>
+#include <iomanip>
 
 using namespace std;
 
-template <int n, int m>
-bool max_in_col(int (&matrix)[n][m], int i, int j)
+bool max_in_col(int **matrix, int i, int j, int n)
 {
 	for (int k = 0; k < n; k++)
 	{
@@ -13,8 +13,7 @@ bool max_in_col(int (&matrix)[n][m], int i, int j)
 	return true;
 }
 
-template <int n, int m>
-bool min_in_row(int (&matrix)[n][m], int i, int j)
+bool min_in_row(int** matrix, int i, int j, int m)
 {
 	for (int k = 0; k < m; k++)
 	{
@@ -24,55 +23,64 @@ bool min_in_row(int (&matrix)[n][m], int i, int j)
 	return true;
 }
 
-template <int n, int m>
-void saddle_points(int (&matrix)[n][m])
- {
-	bool found = false;
-	 for (int i = 0; i < n; i++)
-	 {
-		 for (int j = 0; j < m; j++)
-		 {
-			 if (!min_in_row(matrix, i, j) || !max_in_col(matrix, i, j)) continue;
-			 cout << "Элемент " << matrix[i][j] <<  " является седловым.\n";
-			 cout << "Строка: " << i + 1 << " \t столбец: " << j + 1;
-			 found = true;
-		 }
-	 }
-	 if (found == false)
-		 cout << "В данной матрице нет седловой точки.\n";
- }
-
-template <int n, int m>
- void show_matrix(int (& matrix)[n][m])
+void saddle_points(int** matrix, int n, int m)
 {
+	bool found = false;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
 		{
-			cout << matrix[i][j] << "\t";
+			if (!min_in_row(matrix, i, j, m) || !max_in_col(matrix, i, j, n)) continue;
+			cout << "Элемент " << matrix[i][j] << " является седловым.\n";
+			cout << "Строка: " << i + 1 << " \t столбец: " << j + 1 << endl;
+			found = true;
+			break;
 		}
-		cout << "\n";
 	}
+	if (found == false)
+		cout << "В данной матрице нет седловой точки.\n";
+}
+
+void show_matrix(int** matrix, int n, int m)
+{
+	cout << "\nВведено:\n";
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			cout << setw(3) << matrix[i][j];
+		}
+		cout << endl;
+
+	}
+	cout << endl;
 }
 
 int main()
 {
 	setlocale(LC_ALL, "Rus");
 
-	// Зададим число строк и столбцов
-	const int n = 3; 
+	const int n = 3;
 	const int m = 4;
-
-	// Зададим значения матрицы
-	int matrix[n][m] = { 
-		{5,6,4,5}, 
-		{-2,5,3,7}, 
-		{8,7,-2,6} };
+	int** matrix = new int* [n];
+	for (int i = 0; i < n; i++)
+		matrix[i] = new int[m];
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			cout << "Ведите элемент [" << i + 1 << "]";
+			cout << "[" << j + 1 << "] = ";
+			cin >> matrix[i][j];
+		}
+	}
 
 	// Выведем результат
-	show_matrix(matrix);
-	saddle_points(matrix);
+	show_matrix(matrix, n, m);
+	saddle_points(matrix, n, m);
+
+	// Освобождение памяти
+	delete[] matrix;
 
 	return 0;
 }
-
