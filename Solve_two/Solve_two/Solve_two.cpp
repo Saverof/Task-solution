@@ -1,25 +1,21 @@
-﻿#include <iostream>
-#include <stack>
+#include <iostream>
 
 using namespace std;
 
 // Функция вывода результата
-bool result(const string &str, bool state)
+bool result(const string& str, bool state)
 {
-    if (state)
-        cout << str << " - правильная скобочная последовательность\n";
-    else
-        cout << str << " - неправильная скобочная последовательность\n";
+    cout << str + (state ? " - правильная скобочная последовательность\n" : " - неправильная скобочная последовательность\n");
 
-    return 0;
+    return true;
 }
 
 // Функция обработки строки
-bool bracket_check(const string &str)
+bool bracket_check(const string& str)
 {
     bool state = true;      // Отображает правильно ли выражение
     int bracket_open = 0;   // Количество открытых скобок
-
+    
     for (int i = 0; i < str.size(); i++)
     {
         switch (str[i])
@@ -36,7 +32,8 @@ bool bracket_check(const string &str)
                     else
                         bracket_open++; // Иначе увеличиваем число открывающих скобок
                 }
-            }else
+            }
+            else
                 bracket_open++; // И увеличиваем число открывающих скобок
             break;
         case ')':
@@ -44,30 +41,28 @@ bool bracket_check(const string &str)
             break;
         default:
             break;
-        }  
+        }
+
+        if (!state) // Если последовательнось заведомо неправильная, выходим из цикла 
+            break;
     }
 
     // Проверяем соотвествуют ли полученные данные требуемым
     if (bracket_open != 0)
         state = false;
 
-    // Выводим результат
-    result(str, state);
-    return 0;
+    return state;
 }
 
-int main() 
+int main()
 {
     setlocale(LC_ALL, "Rus");
-    
-    // Тестовые комбинации 
-    bracket_check("((x * y) + (2 * (x + y))) * (y + 3)");
-    bracket_check("((((x * y) + (2 * (x - y)))");
-    bracket_check(")(");
-    bracket_check("())(())");
-    bracket_check(")(())(");
-    bracket_check("(()())");
+
+    // Тестовые комбинации
+    string str = "((x * y) + (2 * (x + y))) * (y + 3)";
+    result(str, bracket_check(str));
+    str = "((((x * y) + (2 * (x - y)))";
+    result(str, bracket_check(str));
 
     return 0;
 }
-
